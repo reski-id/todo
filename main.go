@@ -1,12 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"todoapp/controllers"
 
 	"github.com/gin-gonic/gin" // Import Redis package
-	"github.com/joho/godotenv"
 
 	// docs "todoapp/docs"
 	seed "todoapp/seeder"
@@ -26,11 +23,11 @@ import (
 func main() {
 
 	//setting env
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println("Error loading .env file")
-		os.Exit(1)
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	fmt.Println("Error loading .env file")
+	// 	os.Exit(1)
+	// }
 
 	//migrate and seeder
 	seed.CreateMigration()
