@@ -8,6 +8,13 @@ WORKDIR /app
 # copy all files to /app
 COPY . .
 
+# add environment variables
+ENV MYSQL_HOST=localhost
+ENV MYSQL_PORT=3306
+ENV MYSQL_USER=root
+ENV MYSQL_PASSWORD=
+ENV MYSQL_DBNAME=todoappdb
+
 # Expose port 3030 to the host on
 EXPOSE 3030
 
