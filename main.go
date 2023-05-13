@@ -35,6 +35,7 @@ func main() {
 	//migrate and seeder
 	seed.CreateMigration()
 	seed.SeedActivities()
+	seed.SeedTodos()
 
 	router := gin.Default()
 
@@ -43,15 +44,21 @@ func main() {
 	// docs.SwaggerInfo.BasePath = "/api/v1"
 
 	activitiesController := controllers.ActivitiesController{}
+	todosController := controllers.TodosController{}
 
 	v1 := router.Group("")
 
 	v1.GET("/activity-groups", activitiesController.GetActivities)
-
 	v1.POST("/activity-groups", activitiesController.CreateActivity)
 	v1.PUT("/activity-groups/:id", activitiesController.UpdateActivity)
 	v1.DELETE("/activity-groups/:id", activitiesController.DeleteActivity)
 	v1.GET("/activity-groups/:id", activitiesController.GetActivity)
+
+	v1.GET("/todo-items", todosController.GetTodos)
+	v1.POST("/todo-items", todosController.CreateTodo)
+	v1.PUT("/todo-items/:id", todosController.UpdateTodo)
+	v1.DELETE("/todo-items/:id", todosController.DeleteTodo)
+	v1.GET("/todo-items/:id", todosController.GetTodo)
 
 	router.Run(":3030")
 }

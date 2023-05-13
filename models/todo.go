@@ -5,8 +5,8 @@ import (
 )
 
 type Todo struct {
-	ID              int       `json:"todo_id"`
-	ActivityGroupID string    `json:"activity_group_id"`
+	ID              int       `json:"id"`
+	ActivityGroupID int       `json:"activity_group_id"`
 	Title           string    `json:"title"`
 	Priority        string    `json:"priority"`
 	IsActive        bool      `json:"is_active"`
@@ -18,4 +18,10 @@ type TodoResponse struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
 	Data    []Todo `json:"data"`
+}
+
+type TodoSingleResponse struct {
+	Status  string `json:"status"`
+	Message string `json:"message"`
+	Data    Todo   `json:"data"`
 }

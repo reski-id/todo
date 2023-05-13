@@ -67,3 +67,57 @@ func SeedActivities() {
 
 	log.Println("activities seeded")
 }
+
+func SeedTodos() {
+	db, err := utils.Connect()
+	if err != nil {
+		log.Fatalf("failed to connect database: %s", err.Error())
+	}
+
+	// check if any todos already exist in the database
+	var todo models.Todo
+	if db.First(&todo).Error == nil {
+		log.Println("todos already seeded")
+		return
+	}
+
+	// migrate the todo table
+	db.AutoMigrate(&models.Todo{})
+
+	// create some todos
+	todos := []models.Todo{
+		{
+			ActivityGroupID: 1,
+			Title:           "Buy groceries",
+			Priority:        "high",
+			IsActive:        true,
+			CreatedAt:       time.Now(),
+			UpdatedAt:       time.Now(),
+		},
+		{
+			ActivityGroupID: 1,
+			Title:           "Do laundry",
+			Priority:        "medium",
+			IsActive:        true,
+			CreatedAt:       time.Now(),
+			UpdatedAt:       time.Now(),
+		},
+		{
+			ActivityGroupID: 1,
+			Title:           "Write blog post",
+			Priority:        "low",
+			IsActive:        false,
+			CreatedAt:       time.Now(),
+			UpdatedAt:       time.Now(),
+		},
+	}
+
+	for i := range todos {
+		err = db.Create(&todos[i]).Error
+		if err != nil {
+			log.Fatalf("failed to seed todos: %s", err.Error())
+		}
+	}
+
+	log.Println("todos seeded")
+}
