@@ -21,7 +21,7 @@ func Connect() (*gorm.DB, error) {
 	dbUser := "root"
 	dbPassword := ""
 	dbHost := "127.0.0.1"
-	dbPort := "3306"
+	dbPort := "33065"
 	dbName := "todo4"
 
 	dsn := dbUser + ":" + dbPassword + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"

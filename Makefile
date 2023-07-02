@@ -4,5 +4,12 @@ swag-init:
 swag-fmt:
 	swag fmt --exclude build,developments,docs,scripts -g main.go 
 
+up:
+	docker-compose up
+
+down:
+	docker-compose down
+
 run:
 	go run main.go
+	
