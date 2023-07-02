@@ -3,45 +3,29 @@ package main
 import (
 	"todoapp/controllers"
 
-	"github.com/gin-gonic/gin" // Import Redis package
-
-	// docs "todoapp/docs"
-	seed "todoapp/seeder"
-
-	swaggerfiles "github.com/swaggo/files"     // swagger embed files
-	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+	graylog "github.com/gemnasium/logrus-graylog-hook/v3"
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
-// @title           Swagger todoapp APP
-// @version         2.0
-// @description     This is a swagger documentation for Costumer APP.
-// @BasePath        /api/v1
-// @host            localhost:8080
-// @schemes         http https
-// @SecurityDefinition  jwt
-// @Security        jwt
 func main() {
+	log := logrus.New()
 
-	//setting env
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	fmt.Println("Error loading .env file")
-	// 	os.Exit(1)
-	// }
+	// Create a new Graylog hook
+	hook := graylog.NewGraylogHook("localhost:12201", nil)
 
-	//migrate and seeder
-	seed.CreateMigration()
-	seed.SeedActivities()
-	seed.SeedTodos()
+	// Set the formatter to JSON
+	log.Formatter = new(logrus.JSONFormatter)
+
+	// Add the Graylog hook to the logger
+	log.Hooks.Add(hook)
+
+	// Set the log level
+	log.SetLevel(logrus.DebugLevel)
 
 	router := gin.Default()
 
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-
-	// docs.SwaggerInfo.BasePath = "/api/v1"
-
-	activitiesController := controllers.ActivitiesController{}
-	todosController := controllers.TodosController{}
+	activitiesController := controllers.NewActivitiesController(log)
 
 	v1 := router.Group("")
 
@@ -50,12 +34,6 @@ func main() {
 	v1.PUT("/activity-groups/:id", activitiesController.UpdateActivity)
 	v1.DELETE("/activity-groups/:id", activitiesController.DeleteActivity)
 	v1.GET("/activity-groups/:id", activitiesController.GetActivity)
-
-	v1.GET("/todo-items", todosController.GetTodos)
-	v1.POST("/todo-items", todosController.CreateTodo)
-	v1.PUT("/todo-items/:id", todosController.UpdateTodo)
-	v1.DELETE("/todo-items/:id", todosController.DeleteTodo)
-	v1.GET("/todo-items/:id", todosController.GetTodo)
 
 	router.Run(":3030")
 }
